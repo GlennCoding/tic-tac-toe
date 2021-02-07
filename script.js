@@ -2,9 +2,8 @@ var heading = document.getElementById("heading")
 var button = document.getElementById("start_button")
 var squareField = document.getElementsByTagName("td")
 
-var player
-var player_A = []
-var player_B = []
+var players = [{ name: "Pig", emoji: "🐷", fields: [] }, { name: "Frog", emoji: "🐸", fields: [] }]
+var p_num = 1
 
 var gameOver = false;
 
@@ -21,8 +20,8 @@ var wins = [
 
 function startGame() {
     button.style.display = "none"
-    heading.innerHTML = "Pig's move"
-    player = 1
+    p_num = 1
+    heading.innerHTML = players[p_num].name + "'s move"
     clickable()
 }
 
@@ -32,73 +31,31 @@ function clickable() {
     }
 }
 
-function updateFields(player) {
-
-    obj.innerHTML = "🐷"
-
-    player_A.push(i)
-    console.log("Pig: " + player_A)
-
-    if (player_A.length >= 3) {
-        checkWin(player_A)
-    }
-
-    player = 0
-
-    if (!gameOver) {
-        document.getElementById("heading").innerHTML =
-            "Frog's move"
-    }
-    else {
-        document.getElementById("heading").innerHTML =
-            "Pig has won! 🥳"
-    }
-}
-
 function selectSquareField(obj, i) {
-    console.log("CLICK")
-    if (!gameOver)
-        if (player == 1) {
-            obj.innerHTML = "🐷"
+    if (!gameOver) {
+        obj.innerHTML = players[p_num].emoji
 
-            player_A.push(i)
-            console.log("Pig: " + player_A)
+        players[p_num].fields.push(i)
 
-            if (player_A.length >= 3) {
-                checkWin(player_A)
-            }
+        if (players[p_num].fields.length >= 3) {
+            checkWin(players[p_num].fields)
+        }
 
-            player = 0
-
-            if (!gameOver) {
-                document.getElementById("heading").innerHTML =
-                    "Frog's move"
+        if (!gameOver) {
+            if (p_num == 0) {
+                p_num = 1
             }
             else {
-                document.getElementById("heading").innerHTML =
-                    "Pig has won! 🥳"
+                p_num = 0
             }
+            document.getElementById("heading").innerHTML =
+                players[p_num].name + "'s move"
         }
         else {
-            obj.innerHTML = "🐸"
-            player_B.push(i)
-            console.log("Frog: " + player_B)
-
-            if (player_A.length >= 3) {
-                checkWin(player_B)
-            }
-
-            player = 1
-
-            if (!gameOver) {
-                document.getElementById("heading").innerHTML =
-                    "Pig's move"
-            }
-            else {
-                document.getElementById("heading").innerHTML =
-                    "Frog has won! 🥳"
-            }
+            document.getElementById("heading").innerHTML =
+                players[p_num].name + " has won! 🥳"
         }
+    }
     obj.removeEventListener("click", selectSquareField)
 }
 
@@ -106,10 +63,9 @@ function checkArrayDuplicates(arr, target) {
     return target.every(v => arr.includes(v))
 }
 
-function checkWin(playerAB) {
+function checkWin(player_field) {
     for (let winOption of wins) {
-        if (checkArrayDuplicates(playerAB, winOption)) {
-            console.log("WIN!!!")
+        if (checkArrayDuplicates(player_field, winOption)) {
             gameOver = true;
         }
     }
