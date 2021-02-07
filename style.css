@@ -1,0 +1,33 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+#start_button {
+    padding: 5px 60px;
+    margin: 1rem;
+}
+
+td {
+    border: 1px solid black;
+    width: 100px;
+    height: 100px;
+    z-index: 0;
+    font-size: 50px;
+    text-align: center;
+}
+
+tr {
+    width: 300px;
+    height: 100px;
+    border: 1px solid black;
+}
+
+table {
+    width: 300px;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
