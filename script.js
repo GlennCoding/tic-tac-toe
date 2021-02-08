@@ -27,15 +27,16 @@ function startGame() {
 
 function clickable() {
     for (let i = 0; i < squareField.length; i++) {
-        squareField[i].addEventListener("click", function () { selectSquareField(this, i) }, false) // passing both the object plus the index of the specific field
+        squareField[i].index = i
+        // passing both the object plus the index of the specific field
+        squareField[i].addEventListener("click", selectSquareField, false)
     }
 }
 
-function selectSquareField(obj, i) {
+function selectSquareField() {
     if (!gameOver) {
-        obj.innerHTML = players[p_num].emoji
-
-        players[p_num].fields.push(i)
+        this.innerHTML = players[p_num].emoji
+        players[p_num].fields.push(this.index)
 
         if (players[p_num].fields.length >= 3) {
             checkWin(players[p_num].fields)
@@ -48,15 +49,15 @@ function selectSquareField(obj, i) {
             else {
                 p_num = 0
             }
-            document.getElementById("heading").innerHTML =
+            heading.innerHTML =
                 players[p_num].name + "'s move"
         }
         else {
-            document.getElementById("heading").innerHTML =
+            heading.innerHTML =
                 players[p_num].name + " has won! 🥳"
         }
     }
-    obj.removeEventListener("click", selectSquareField)
+    this.removeEventListener("click", selectSquareField)
 }
 
 function checkArrayDuplicates(arr, target) {
