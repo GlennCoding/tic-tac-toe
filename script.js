@@ -1,6 +1,6 @@
 var heading = document.getElementById("heading")
 var button = document.getElementById("start_button")
-var squareField = document.getElementsByTagName("td")
+var gameField = document.getElementsByTagName("td")
 
 var players = [{ name: "Pig", emoji: "🐷", fields: [] }, { name: "Frog", emoji: "🐸", fields: [] }]
 var p_num = 1
@@ -22,18 +22,17 @@ function startGame() {
     button.style.display = "none"
     p_num = 1
     heading.innerHTML = players[p_num].name + "'s move"
-    clickable()
+    setFieldsClickable()
 }
 
-function clickable() {
-    for (let i = 0; i < squareField.length; i++) {
-        squareField[i].index = i
-        // passing both the object plus the index of the specific field
-        squareField[i].addEventListener("click", selectSquareField, false)
+function setFieldsClickable() {
+    for (let i = 0; i < gameField.length; i++) {
+        gameField[i].index = i
+        gameField[i].addEventListener("click", fieldClicked, false)
     }
 }
 
-function selectSquareField() {
+function fieldClicked() {
     if (!gameOver) {
         this.innerHTML = players[p_num].emoji
         players[p_num].fields.push(this.index)
@@ -42,7 +41,11 @@ function selectSquareField() {
             checkWin(players[p_num].fields)
         }
 
-        if (!gameOver) {
+        if (!gameOver && players[p_num].fields.length == 5) {
+            heading.innerHTML =
+                "Draw 🤷‍♂️"
+        }
+        else if (!gameOver) {
             if (p_num == 0) {
                 p_num = 1
             }
@@ -57,16 +60,16 @@ function selectSquareField() {
                 players[p_num].name + " has won! 🥳"
         }
     }
-    this.removeEventListener("click", selectSquareField)
+    this.removeEventListener("click", fieldClicked)
 }
 
 function checkArrayDuplicates(arr, target) {
     return target.every(v => arr.includes(v))
 }
 
-function checkWin(player_field) {
+function checkWin(playerField) {
     for (let winOption of wins) {
-        if (checkArrayDuplicates(player_field, winOption)) {
+        if (checkArrayDuplicates(playerField, winOption)) {
             gameOver = true;
         }
     }
